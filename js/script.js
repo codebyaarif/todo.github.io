@@ -14,7 +14,12 @@ const viewDetails = {
 
 function getTasks() {
   try {
-    return JSON.parse(localStorage.getItem("todo")) || [];
+    const storedTasks = JSON.parse(localStorage.getItem("todo"));
+    if (!Array.isArray(storedTasks)) return [];
+    return storedTasks.filter(
+      (task) =>
+        task && typeof task === "object" && typeof task.title === "string",
+    );
   } catch (error) {
     return [];
   }
