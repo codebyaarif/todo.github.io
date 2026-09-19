@@ -1,16 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-      crossorigin="anonymous"
-    />
 
     <!-- font awesome -->
     <link
@@ -21,51 +13,101 @@
       referrerpolicy="no-referrer"
     />
 
-    <!-- custom css -->
     <link rel="stylesheet" href="./sass/style.css" />
-    <title>Todo</title>
+    <title>Todo | Focus on what matters</title>
   </head>
   <body>
-    <!-- Todo -->
-    <div class="container">
-      <div class="todoApp">
-        <div class="bgColor">
-          <div class="top">
-            <h1>Todo...</h1>
-            <input type="text" id="searchBox" placeholder="Search..." />
-          </div>
-          <div class="content">
-            <form>
-              <div class="input-group mb-3">
-                <input
-                  type="text"
-                  class="form-control fs-3 py-1"
-                  placeholder="Enter your todo..."
-                  id="inputField"
-                />
-                <input
-                  type="submit"
-                  value="+"
-                  id="addBtn"
-                  class="btn btn-success ms-1 rounded-circle fs-2 px-3 fw-bold"
-                />
-              </div>
-            </form>
-            <div id="card"></div>
-          </div>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <a class="brand" href="#" aria-label="Todo home"
+          ><span class="brand-mark"><i class="fa-solid fa-check"></i></span
+          ><span>Todo</span></a
+        >
+        <div class="sidebar-label">Workspace</div>
+        <nav class="nav-list" id="viewNav">
+          <button class="nav-item active" data-view="inbox">
+            <i class="fa-solid fa-inbox"></i><span>Inbox</span
+            ><b id="inboxCount">0</b>
+          </button>
+          <button class="nav-item" data-view="today">
+            <i class="fa-solid fa-calendar-day"></i><span>Today</span>
+          </button>
+          <button class="nav-item" data-view="upcoming">
+            <i class="fa-solid fa-calendar"></i><span>Upcoming</span>
+          </button>
+          <button class="nav-item" data-view="completed">
+            <i class="fa-solid fa-circle-check"></i><span>Completed</span>
+          </button>
+          <button class="nav-item" data-view="all">
+            <i class="fa-solid fa-list-check"></i><span>All tasks</span
+            ><b id="allCount">0</b>
+          </button>
+        </nav>
+        <div class="sidebar-footer">
+          <button
+            class="nav-item"
+            id="themeToggle"
+            title="Toggle light and dark mode"
+          >
+            <i class="fa-solid fa-moon"></i><span>Appearance</span>
+          </button>
+          <p>
+            <i class="fa-solid fa-shield-heart"></i> Your tasks stay on this
+            device.
+          </p>
         </div>
-      </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="app-header">
+          <div class="mobile-brand">
+            <span class="brand-mark"><i class="fa-solid fa-check"></i></span
+            >Todo
+          </div>
+          <div class="header-actions">
+            <label class="search-field" for="searchBox"
+              ><i class="fa-solid fa-magnifying-glass"></i
+              ><input
+                type="search"
+                id="searchBox"
+                placeholder="Search tasks"
+                autocomplete="off"
+            /></label>
+          </div>
+        </header>
+        <section class="workspace" aria-labelledby="pageTitle">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow" id="dateLabel">Your workspace</p>
+              <h1 id="pageTitle">Inbox</h1>
+              <p class="subtitle" id="pageSubtitle">
+                Capture ideas and keep moving.
+              </p>
+            </div>
+          </div>
+          <form class="add-task-form" id="taskForm">
+            <i class="fa-solid fa-plus form-icon" aria-hidden="true"></i
+            ><input
+              type="text"
+              id="inputField"
+              placeholder="What needs to be done?"
+              aria-label="New task title"
+              maxlength="160"
+            /><button type="submit" id="addBtn">
+              Add task <span class="shortcut">Enter</span>
+            </button>
+          </form>
+          <div class="list-toolbar">
+            <span id="taskSummary">0 tasks</span
+            ><button class="filter-button" id="clearCompleted">
+              <i class="fa-solid fa-broom"></i> Clear completed
+            </button>
+          </div>
+          <div id="card" class="task-list" aria-live="polite"></div>
+        </section>
+      </main>
     </div>
-    <!-- Todo -->
 
-    <!-- bootstrap -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-      crossorigin="anonymous"
-    ></script>
-
-    <!-- font awesome -->
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"
       integrity="sha512-yFjZbTYRCJodnuyGlsKamNE/LlEaEAxSUDe5+u61mV8zzqJVFOH7TnULE2/PP/l5vKWpUNnF4VGVkXh3MjgLsg=="
@@ -73,7 +115,6 @@
       referrerpolicy="no-referrer"
     ></script>
 
-    <!-- external js -->
     <script src="./js/script.js"></script>
   </body>
 </html>
