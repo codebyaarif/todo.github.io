@@ -113,9 +113,7 @@ input:focus-visible {
   border: 0;
   border-radius: 8px;
   text-align: left;
-  transition:
-    background 180ms ease,
-    color 180ms ease;
+  transition: background 180ms ease, color 180ms ease;
 }
 
 .nav-item i {
@@ -306,6 +304,10 @@ h1 {
   box-shadow: var(--shadow);
 }
 
+.add-task-form:focus-within {
+  background: var(--surface-soft);
+}
+
 .form-icon {
   color: var(--accent);
 }
@@ -320,13 +322,17 @@ h1 {
   outline: 0;
 }
 
+.add-task-form input:focus {
+  background: transparent;
+}
+
 .add-task-form input::placeholder {
   color: #9aa5b3;
 }
 
-.add-task-form input[type="date"] {
+.add-task-form input[type=date] {
   flex: 0 0 auto;
-  width: 132px;
+  width: 110px;
   padding: 9px 0;
 }
 
@@ -414,13 +420,14 @@ h1 {
 }
 
 .task-copy h2 {
-  overflow: hidden;
+  overflow: visible;
   margin: 0 0 7px;
   color: var(--text);
   font-size: 15px;
   font-weight: 650;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .task-meta {
@@ -517,6 +524,10 @@ h1 {
   background: #263342;
 }
 
+.dark-mode .add-task-form input[type=date]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
 @media (max-width: 700px) {
   .sidebar {
     width: 68px;
@@ -572,10 +583,35 @@ h1 {
     margin-bottom: 22px;
   }
   .add-task-form {
-    padding-left: 12px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "title title" "date button";
+    gap: 8px;
+    padding: 6px 6px 6px 10px;
+  }
+  .add-task-form .form-icon {
+    position: absolute;
+    top: 18px;
+    left: 10px;
+  }
+  .add-task-form input[type=text] {
+    grid-area: title;
+    width: 100%;
+    padding-left: 22px;
+    font-size: 13px;
+  }
+  .add-task-form input[type=date] {
+    grid-area: date;
+    width: 80px;
+    color: #9aa5b3;
+    font-size: 10px;
   }
   .add-task-form button {
-    padding: 10px;
+    grid-area: button;
+    margin-left: 0;
+    padding: 10px 8px;
+    font-size: 12px;
   }
   .task-item {
     align-items: flex-start;
