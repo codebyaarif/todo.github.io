@@ -278,17 +278,16 @@ h1 {
 .add-task-form input::placeholder {
   color: #9aa5b3;
 }
+.add-task-form input[type="date"] {
+  flex: 0 0 auto;
+  width: 132px;
+  padding: 9px 0;
+}
 .add-task-form button {
+  margin-left: auto;
   padding: 10px 14px;
   font-size: 13px;
   box-shadow: none;
-}
-.shortcut {
-  padding: 2px 5px;
-  color: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 4px;
-  font-size: 10px;
 }
 .list-toolbar {
   display: flex;
@@ -503,9 +502,6 @@ h1 {
   }
   .add-task-form button {
     padding: 10px;
-  }
-  .shortcut {
-    display: none;
   }
   .task-item {
     align-items: flex-start;

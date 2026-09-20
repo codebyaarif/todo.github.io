@@ -3,6 +3,7 @@ const card = document.querySelector("#card");
 const searchBox = document.querySelector("#searchBox");
 const taskForm = document.querySelector("#taskForm");
 const viewNav = document.querySelector("#viewNav");
+const dueDate = document.querySelector("#dueDate");
 let currentView = "inbox";
 const viewDetails = {
   inbox: ["Inbox", "Capture ideas and keep moving."],
@@ -41,6 +42,25 @@ function escapeHtml(value) {
   );
 }
 
+function getDateKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getTaskView(task) {
+  if (!task.dueDate) {
+    return task.view === "today" || task.view === "upcoming"
+      ? task.view
+      : "inbox";
+  }
+  const today = getDateKey();
+  if (task.dueDate === today) return "today";
+  if (task.dueDate > today) return "upcoming";
+  return "inbox";
+}
+
 function showData() {
   const tasks = getTasks();
   const query = searchBox.value.toLowerCase().trim();
@@ -50,21 +70,27 @@ function showData() {
       currentView === "all" ||
       (currentView === "completed"
         ? task.completed
-        : currentView === "inbox"
-          ? !task.completed
-          : task.view === currentView);
+        : !task.completed && getTaskView(task) === currentView);
     return matchesSearch && matchesView;
   });
   card.innerHTML = visibleTasks.length
     ? visibleTasks
         .map((task) => {
           const index = tasks.indexOf(task);
-          const date = task.createdAt
-            ? new Date(task.createdAt).toLocaleDateString(undefined, {
-                month: "short",
-                day: "numeric",
-              })
-            : "Added recently";
+          const date = task.dueDate
+            ? new Date(`${task.dueDate}T00:00:00`).toLocaleDateString(
+                undefined,
+                {
+                  month: "short",
+                  day: "numeric",
+                },
+              )
+            : task.createdAt
+              ? new Date(task.createdAt).toLocaleDateString(undefined, {
+                  month: "short",
+                  day: "numeric",
+                })
+              : "Added recently";
           return `<article class="task-item ${task.completed ? "is-complete" : ""}" data-index="${index}"><button class="task-check ${task.completed ? "checked" : ""}" data-action="complete" aria-label="${task.completed ? "Mark incomplete" : "Mark complete"}" title="${task.completed ? "Mark incomplete" : "Mark complete"}"><i class="fa-solid fa-check"></i></button><div class="task-copy"><h2>${escapeHtml(task.title)}</h2><div class="task-meta"><span><i class="fa-regular fa-calendar"></i> ${date}</span><span class="priority"><i class="fa-solid fa-flag"></i> ${task.completed ? "Done" : "Open"}</span></div></div><div class="task-actions"><button data-action="edit" aria-label="Edit ${escapeHtml(task.title)}" title="Edit task"><i class="fa-solid fa-pen"></i></button><button data-action="delete" aria-label="Delete ${escapeHtml(task.title)}" title="Delete task"><i class="fa-solid fa-trash"></i></button></div></article>`;
         })
         .join("")
@@ -72,7 +98,7 @@ function showData() {
   document.querySelector("#taskSummary").textContent =
     `${visibleTasks.length} ${visibleTasks.length === 1 ? "task" : "tasks"}`;
   document.querySelector("#inboxCount").textContent = tasks.filter(
-    (task) => !task.completed,
+    (task) => !task.completed && getTaskView(task) === "inbox",
   ).length;
   document.querySelector("#allCount").textContent = tasks.length;
 }
@@ -88,14 +114,13 @@ taskForm.addEventListener("submit", (event) => {
   tasks.unshift({
     title,
     completed: false,
-    view:
-      currentView === "today" || currentView === "upcoming"
-        ? currentView
-        : "inbox",
+    view: "inbox",
+    dueDate: dueDate.value,
     createdAt: new Date().toISOString(),
   });
   saveTasks(tasks);
   inputField.value = "";
+  dueDate.value = "";
   showData();
   inputField.focus();
 });
@@ -124,6 +149,7 @@ card.addEventListener("click", (event) => {
     tasks[index].completed = !tasks[index].completed;
   if (button.dataset.action === "edit") {
     inputField.value = tasks[index].title;
+    dueDate.value = tasks[index].dueDate || "";
     tasks.splice(index, 1);
     inputField.focus();
   }
